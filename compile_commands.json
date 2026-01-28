@@ -1,0 +1,32 @@
+[
+  {
+    "file": "src/main.c",
+    "arguments": [
+      "gcc",
+      "-Iinclude",
+      "-O2",
+      "-DNDEBUG",
+      "-c",
+      "src/main.c",
+      "-o",
+      "build/release/main.o"
+    ],
+    "directory": "/home/neburion/Projects/Dev/2048-game",
+    "output": "build/release/main.o"
+  },
+  {
+    "file": "src/term.c",
+    "arguments": [
+      "gcc",
+      "-Iinclude",
+      "-O2",
+      "-DNDEBUG",
+      "-c",
+      "src/term.c",
+      "-o",
+      "build/release/term.o"
+    ],
+    "directory": "/home/neburion/Projects/Dev/2048-game",
+    "output": "build/release/term.o"
+  }
+]

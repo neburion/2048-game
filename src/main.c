@@ -10,6 +10,7 @@ int main(){
     srand(time(NULL)); // rand() seed
     char input; // input input holder
     char state;
+    int score = 0;
 
     // setup ncurses
     initscr();
@@ -23,28 +24,34 @@ int main(){
     newTile(&grid);
 
     // controls
+    char up = 'k';
+    char down = 'j';
+    char right = 'l';
+    char left = 'h';
+
     int controlNum = 5;
     char **controls = malloc(controlNum * sizeof(char*));
     for(int i = 0; i < controlNum; i++){
         controls[i] = malloc(sizeof(char)*20);
     }
     strcpy(controls[0], "Quit: q");
-    strcpy(controls[1], "Up: arrow-up");
-    strcpy(controls[2], "Down: arrow-down");
-    strcpy(controls[3], "Right: arrow-right");
-    strcpy(controls[4], "Left: arrow-left");
+    strcpy(controls[1], "Up: k");
+    strcpy(controls[2], "Down: j");
+    strcpy(controls[3], "Right: l");
+    strcpy(controls[4], "Left: h");
 
-    drawScore(99999999);
+    drawScore(0);
     drawControls(&controls, controlNum);
     drawGame(&grid);
 
     // game loop
     while (1){
         input = getch();
-        if(input != 'q'){
-            swipe(&grid, input);
+        if(input == up || input == down || input == right || input == left){
+            score = swipe(&grid, input, score);
+            newTile(&grid);
         }
-        newTile(&grid);
+        drawScore(score);
         drawGame(&grid);
 
         state = check(&grid);
@@ -54,7 +61,7 @@ int main(){
     }
 
     // on game over
-    gameOver(state);
+    gameOver(state, score);
     while(input != 'q'){
         input = getch();
     }

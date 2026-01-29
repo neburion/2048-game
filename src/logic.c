@@ -40,9 +40,10 @@ int **setup(){
 }
 
 // handles swiping the grid
-void swipe(int ***grid, char input){
+int swipe(int ***grid, char input, int curScore){
     int **g = *grid;
     int actions;
+    int score = curScore;
 
     switch(input){
       case 'k':
@@ -52,6 +53,7 @@ void swipe(int ***grid, char input){
                 for(int j = 0; j < GAME_RESOLUTION; j++){
                     if(!(g[i][j] == 0 && g[i-1][j] == 0)){
                         if(g[i][j] == g[i-1][j] || g[i-1][j] == 0){
+                            score += g[i][j]*2;
                             fill(grid, i-1, j, (g[i][j] + g[i-1][j]));
                             fill(grid, i, j, 0);
                             actions++;
@@ -59,9 +61,7 @@ void swipe(int ***grid, char input){
                     }
                 }
             }
-            if(actions == 0){
-                break;
-            }
+            if(actions == 0){break;}
         }
         break;
       case 'j':
@@ -71,6 +71,7 @@ void swipe(int ***grid, char input){
                 for(int j = 0; j < GAME_RESOLUTION; j++){
                     if(!(g[i][j] == 0 && g[i+1][j] == 0)){
                         if(g[i][j] == g[i+1][j] || g[i+1][j] == 0){
+                            score += g[i][j]*2;
                             fill(grid, i+1, j, (g[i][j] + g[i+1][j]));
                             fill(grid, i, j, 0);
                             actions++;
@@ -78,9 +79,7 @@ void swipe(int ***grid, char input){
                     }
                 }
             }
-            if(actions == 0){
-                break;
-            }
+            if(actions == 0){break;}
         }
         break;
       case 'l':
@@ -90,6 +89,7 @@ void swipe(int ***grid, char input){
                 for(int j = GAME_RESOLUTION-2; j >= 0; j--){
                     if(!(g[i][j] == 0 && g[i][j+1] == 0)){
                         if(g[i][j] == g[i][j+1] || g[i][j+1] == 0){
+                            score += g[i][j]*2;
                             fill(grid, i, j+1, (g[i][j] + g[i][j+1]));
                             fill(grid, i, j, 0);
                             actions++;
@@ -97,9 +97,7 @@ void swipe(int ***grid, char input){
                     }
                 }
             }
-            if(actions == 0){
-                break;
-            }
+            if(actions == 0){break;}
         }
         break;
       case 'h':
@@ -109,6 +107,7 @@ void swipe(int ***grid, char input){
                 for(int j = 1; j < GAME_RESOLUTION; j++){
                     if(!(g[i][j] == 0 && g[i][j-1] == 0)){
                         if(g[i][j] == g[i][j-1] || g[i][j-1] == 0){
+                            score += g[i][j]*2;
                             fill(grid, i, j-1, (g[i][j] + g[i][j-1]));
                             fill(grid, i, j, 0);
                             actions++;
@@ -116,15 +115,13 @@ void swipe(int ***grid, char input){
                     }
                 }
             }
-            if(actions == 0){
-                break;
-            }
+            if(actions == 0){break;}
         }
         break;
       default:
         printf("Error! Incorrect character was give to swipe()!");
-        return;
     }
+    return score;
 }
 
 // checks if the game ended

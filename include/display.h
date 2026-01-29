@@ -8,6 +8,6 @@
 void drawScore(int score);
 void drawControls(char ***controls, int controlNum);
 void drawGame(int ***grid);
-void gameOver(char state);
+void gameOver(char state, int score);
 
 #endif

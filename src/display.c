@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
+#include <math.h>
 #include "display.h"
 
 void drawBox(int x, int y, int width, int height){
@@ -27,7 +28,7 @@ void drawBox(int x, int y, int width, int height){
     }
 }
 
-void drawMenu(int x, int y, int width, char **title, int titleLen, char ***content, int contentSize){
+void drawList(int x, int y, int width, char **title, int titleLen, char ***content, int contentSize){
     int height = contentSize+1;
     char *t = *title;
     char **c = *content;
@@ -52,7 +53,7 @@ void drawScore(int score){
     s[0] = malloc(width*sizeof(char));
     sprintf(s[0], "%d", score);
 
-    drawMenu(x-1, y, width, &n, nLen, &s, 1);
+    drawList(x-1, y, width, &n, nLen, &s, 1);
 
     free(s[0]);
     free(s);
@@ -66,7 +67,7 @@ void drawControls(char ***controls, int controlNum){
     int nLen = 9;
     char **c = *controls;
 
-    drawMenu(x, y, width, &n, nLen, &c, controlNum);
+    drawList(x, y, width, &n, nLen, &c, controlNum);
 }
 
 void drawGame(int ***grid){
@@ -91,12 +92,26 @@ void drawGame(int ***grid){
     refresh();
 }
 
-void gameOver(char state){
+void gameOver(char state, int score){
     char *message;
     int messageLen;
 
     char *qMessage = "Press \"Q\" to quit the game.";
     int qMessageLen = 27;
+
+    char *sMessage = "Final Score: ";
+    int sMessageLen = 27;
+
+    int scoreLen;
+    if(score == 0){
+        scoreLen = 1;
+    } else {
+        scoreLen = (int)log10(score) + 1;
+    }
+
+    int sLen = sMessageLen+scoreLen;
+    char *s = malloc(sizeof(char)*(sLen+1));
+    sprintf(s, "%s%d", sMessage, score);
 
     if(state == 'w'){
         message = "You won!";
@@ -108,11 +123,18 @@ void gameOver(char state){
 
     int x = (WIN_WIDTH/2)-(messageLen/2);
     int y = WIN_HEIGHT/2;
+
+    int sX = (WIN_WIDTH/2)-(sLen/4);
+    int sY = y+1;
+
     int qX = (WIN_WIDTH/2)-(qMessageLen/2);
-    int qY = y+1;
+    int qY = sY+1;
 
     clear();
     mvwprintw(stdscr, y, x, "%s", message);
+    mvwprintw(stdscr, sY, sX, "%s", s);
     mvwprintw(stdscr, qY, qX, "%s", qMessage);
     refresh();
+
+    free(s);
 }

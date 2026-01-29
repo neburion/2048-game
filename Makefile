@@ -1,6 +1,7 @@
 # Flags
 RELEASE_FLAGS = -Iinclude -O2 -DNDEBUG -lm
 DEBUG_FLAGS = -Iinclude -fsanitize=undefined,address -g -Wall -Wextra -Wpedantic -lm
+LIB_FLAGS = -lncurses
 # Directories
 SRC = $(wildcard src/*.c)
 RELEASE_OBJ = $(patsubst src/%.c, build/release/%.o, $(SRC))
@@ -14,10 +15,10 @@ DEXEC = bin/game-dbg
 # Default compile
 all: $(EXEC)
 $(EXEC): $(RELEASE_OBJ)
-	$(CC) $(RELEASE_OBJ) -o $(EXEC)
+	$(CC) $(RELEASE_OBJ) -o $(EXEC) $(LIB_FLAGS)
 # Debug compile
 dbg: $(DEBUG_OBJ)
-	$(CC) $(DEBUG_OBJ) $(DEBUG_FLAGS) -o $(DEXEC)
+	$(CC) $(DEBUG_OBJ) $(DEBUG_FLAGS) -o $(DEXEC) $(LIB_FLAGS)
 
 # Patern rules
 build/release/%.o: src/%.c | release-build
